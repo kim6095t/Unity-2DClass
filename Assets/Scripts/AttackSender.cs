@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackSender : MonoBehaviour
 {
-    [SerializeField] Movement movement;
+    [SerializeField] PlayerController movement;
     [SerializeField] AudioSource attackSFX1;
     [SerializeField] AudioSource attackSFX2;
 
