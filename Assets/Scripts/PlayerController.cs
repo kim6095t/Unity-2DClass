@@ -4,20 +4,30 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] Movement movement;     // 움직임 제어.
-    [SerializeField] Animator anim;         // 애니메이터.
-    [SerializeField] Transform imagePivot;  // 이미지의 피봇.
+    [SerializeField] Transform attackPivot;     // 공격 점 기준.
+    [SerializeField] float attackDistance;      // 공격 점 위치.
+    [SerializeField] float attackRange;         // 공격 범위.
+    [SerializeField] float attackRate;          // 공격 주기(속도).
+    [SerializeField] LayerMask enemyMask;       // 적의 레이어.
+
+    [SerializeField] Movement movement;     // 움직임 제어.    
     [SerializeField] AudioSource jumpSFX;   // 점프 효과음.
 
     const int MAX_JUMP_COUNT = 2;
-    
-    bool isAttack;
-    int jumpCount;
+
+    int jumpCount = 0;
+    bool isAttack = false;
+    bool isRight = true;
+
+    new SpriteRenderer renderer;    // 스프라이트 렌더러.
+    Animator anim;                  // 애니메이터.
 
     void Start()
     {
-        Debug.Log("Movement Start");
         jumpCount = MAX_JUMP_COUNT;
+
+        renderer = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -47,13 +57,15 @@ public class PlayerController : MonoBehaviour
         // 왼쪽을 눌렀다면.
         if (horizontal <= -1.0f)
         {
-            imagePivot.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
+            renderer.flipX = true;
         }
         // 오른쪽을 눌렀다면.
         else if (horizontal >= 1.0f)
         {
-            imagePivot.eulerAngles = Vector3.zero;
+            renderer.flipX = false;
         }
+
+        isRight = (renderer.flipX == false);
 
         movement.OnMove(horizontal);
     }
@@ -80,6 +92,23 @@ public class PlayerController : MonoBehaviour
             isAttack = true;
         }
     }
+
+    public void OnAttack()
+    {
+        Vector3 dir = isRight ? Vector2.right : Vector2.left;
+        dir *= attackDistance;
+
+        // Enemy레이어를 달고 있는 모든 콜리더를 검색한다.
+        Collider2D[] hitEnemys = Physics2D.OverlapCircleAll(attackPivot.position + dir, attackRange, enemyMask);
+        foreach(Collider2D collider in hitEnemys)
+        {
+            EnemyController enemy = collider.GetComponent<EnemyController>();
+            if(enemy != null)
+            {
+                Debug.Log("적 공격 : " + enemy.name);
+            }
+        }
+    }
     public void OnFinishAttack()
     {
         isAttack = false;
@@ -95,5 +124,17 @@ public class PlayerController : MonoBehaviour
     {
         // 내 오브젝트를 꺼라.
         gameObject.SetActive(false);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        // 기즈모 : 씬 창의 아이콘 같은 것.
+        if (attackPivot != null)
+        {
+            Gizmos.color = Color.red;
+            Vector3 dir = isRight ? Vector2.right : Vector2.left;
+            dir *= attackDistance;
+            Gizmos.DrawWireSphere(attackPivot.position + dir, attackRange);
+        }
     }
 }
