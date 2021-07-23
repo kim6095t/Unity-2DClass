@@ -22,10 +22,12 @@ public class EnemyController : MonoBehaviour
             return horizontal >= 0;
         }
     }
+    bool isAlive;
 
     private void Start()
     {
         horizontal = 1f;
+        isAlive = true;
 
         // 키 = headPivot과 Enemy의 발(pivot) 까지의 거리.
         height = Vector2.Distance(headPivot.position, transform.position);
@@ -33,6 +35,9 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        if (!isAlive)
+            return;
+
         CheckWall();
         CheckFliff();
         Move();
@@ -66,5 +71,53 @@ public class EnemyController : MonoBehaviour
         renderer.flipX = !isRight;               // 왼쪽으로 움직일 때 좌우 반전 시켜라.
         movement.OnMove(horizontal);             // movemnet에게 방향을 전달해서 움직여라.
         anim.SetBool("isMove", movement.isMove); // animator에게 isMove 파라미터를 갱신해라.
+    }
+
+
+    public void OnDamaged(Damageable.DamageMessage message)
+    {
+        // 반짝임.
+        StartCoroutine(OnBlink());
+
+        Vector2 dir = (transform.position.x <= message.attacker.position.x) ? Vector2.left : Vector2.right;
+        movement.OnKnockBack(dir, 2);
+    }
+    IEnumerator OnBlink()
+    {
+        renderer.color = Color.red;
+        yield return new WaitForSeconds(.1f);
+        renderer.color = Color.white;
+    }
+
+    public void OnDead()
+    {
+        // 내가 죽었다.
+        anim.SetTrigger("onDead");
+
+        isAlive = false;
+        gameObject.layer = LayerMask.NameToLayer("Dead");   // 레이어를 Dead로 바꾼다.
+        StartCoroutine(OnDisappear());
+    }
+
+    IEnumerator OnDisappear()
+    {
+        yield return new WaitForSeconds(3f);
+        float time = 1f;
+
+        while(true)
+        {
+            yield return null; // 1프레임 쉬겠다.
+
+            Color originColor = renderer.color;
+            originColor.a = time / 1f;
+            renderer.color = originColor;
+
+            time -= Time.deltaTime;
+            if (time <= 0.0f)
+                break;
+        }
+
+        renderer.color = new Color(0f, 0f, 0f, 0f);
+        gameObject.SetActive(false);
     }
 }

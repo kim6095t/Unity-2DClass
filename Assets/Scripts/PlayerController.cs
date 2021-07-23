@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     public void OnAttack()
     {
         Vector3 dir = isRight ? Vector2.right : Vector2.left;
@@ -102,10 +103,16 @@ public class PlayerController : MonoBehaviour
         Collider2D[] hitEnemys = Physics2D.OverlapCircleAll(attackPivot.position + dir, attackRange, enemyMask);
         foreach(Collider2D collider in hitEnemys)
         {
-            EnemyController enemy = collider.GetComponent<EnemyController>();
-            if(enemy != null)
+            Damageable target = collider.GetComponent<Damageable>();
+            if(target != null)
             {
-                Debug.Log("적 공격 : " + enemy.name);
+                // 데미지 관련 메세지를 작성해서 전달.
+                Damageable.DamageMessage message;
+                message.attacker = transform;
+                message.attackerName = "플레이어";
+                message.amount = 1;
+
+                target.OnDamaged(message);
             }
         }
     }

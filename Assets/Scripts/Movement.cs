@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour
     
     [SerializeField] float speed;
     [SerializeField] float jumpPower;
+    [SerializeField] float knockBackTime;
 
     float horizontal; // 좌, 우 방향.
 
@@ -31,6 +32,8 @@ public class Movement : MonoBehaviour
         }
     }
 
+    bool isKnockBack;
+
     private void Update()
     {
         CheckGround();
@@ -47,7 +50,10 @@ public class Movement : MonoBehaviour
     }
     void Move()
     {
-        rigid.velocity = new Vector2(horizontal * speed, rigid.velocity.y);
+        if(!isKnockBack)
+            rigid.velocity = new Vector2(horizontal * speed, rigid.velocity.y);
+
+        horizontal = 0f;
     }
 
     public void OnMove(float horizontal)
@@ -60,4 +66,27 @@ public class Movement : MonoBehaviour
         rigid.velocity = new Vector2(rigid.velocity.x, 0.0f);
         rigid.AddForce(Vector3.up * jumpPower, ForceMode2D.Impulse);
     }
+
+    Coroutine knockBackCoroutine;
+
+    public void OnKnockBack(Vector2 dir, float power)
+    {
+        // 기존에 코루틴이 돌아가고 있다면 Stop시킨다.
+        if (knockBackCoroutine != null)
+            StopCoroutine(knockBackCoroutine);
+
+        // 새로운 코루틴을 실행시킨다.
+        knockBackCoroutine = StartCoroutine(KnockBack(dir, power));
+    }
+    IEnumerator KnockBack(Vector2 dir, float power)
+    {
+        isKnockBack = true;
+        rigid.velocity = new Vector2(0, rigid.velocity.y);  // x축 스피드를 0으로.
+        rigid.AddForce(dir * power, ForceMode2D.Impulse);   // x축 방향으로 힘을 가한다.
+
+        yield return new WaitForSeconds(knockBackTime);
+
+        isKnockBack = false;
+    }
+
 }
