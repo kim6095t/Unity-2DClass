@@ -32,7 +32,8 @@ public class Movement : MonoBehaviour
         }
     }
 
-    bool isKnockBack;
+    bool isKnockBack = false;
+    bool isMovement = true;
 
     private void Update()
     {
@@ -50,10 +51,19 @@ public class Movement : MonoBehaviour
     }
     void Move()
     {
-        if(!isKnockBack)
+        if(!isKnockBack && isMovement)
             rigid.velocity = new Vector2(horizontal * speed, rigid.velocity.y);
 
         horizontal = 0f;
+    }
+
+    public void OnStart()
+    {
+        isMovement = true;
+    }
+    public void OnStop()
+    {
+        isMovement = false;
     }
 
     public void OnMove(float horizontal)

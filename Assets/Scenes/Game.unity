@@ -334,6 +334,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 128
   movement: {fileID: 211674776}
   anim: {fileID: 211674772}
   renderer: {fileID: 211674773}
@@ -795,6 +798,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 128
   movement: {fileID: 473583340}
   anim: {fileID: 473583336}
   renderer: {fileID: 473583337}
@@ -1490,12 +1496,12 @@ GameObject:
   - component: {fileID: 909942963}
   - component: {fileID: 909942968}
   - component: {fileID: 909942967}
-  - component: {fileID: 909942964}
   - component: {fileID: 909942960}
   - component: {fileID: 909942965}
+  - component: {fileID: 909942964}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1521,6 +1527,7 @@ MonoBehaviour:
     m_Bits: 256
   movement: {fileID: 909942965}
   jumpSFX: {fileID: 1650969150}
+  godModeTime: 2
 --- !u!4 &909942961
 Transform:
   m_ObjectHideFlags: 0
@@ -1536,7 +1543,7 @@ Transform:
   - {fileID: 426396498}
   - {fileID: 1650969151}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &909942962
 Rigidbody2D:
@@ -1584,13 +1591,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 909942959}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36824248944a97e428a3f55854233aef, type: 3}
+  m_Script: {fileID: 11500000, guid: e62deef8f52c9a741ad486b52199c8bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUI: {fileID: 237879132}
-  gameOverUI: {fileID: 1776448547}
-  playerName: "\uBAA8\uD5D8\uAC00A"
-  hp: 3
+  maxHp: 4
+  OnDamagedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 909942960}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnDamaged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDeadEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 909942960}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnDead
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1776448545}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &909942965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2428,7 +2474,7 @@ Transform:
   - {fileID: 432223713}
   - {fileID: 492493354}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1260200459
 MonoBehaviour:
@@ -2468,6 +2514,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 128
   movement: {fileID: 1260200459}
   anim: {fileID: 1260200463}
   renderer: {fileID: 1260200464}

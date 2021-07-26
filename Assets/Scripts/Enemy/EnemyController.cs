@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("AI")]
     [SerializeField] Transform headPivot;
     [SerializeField] float wallDistance;
     [SerializeField] LayerMask groundMask;
 
+    [Header("Attack")]
+    [SerializeField] LayerMask playerMask;
+
+    [Header("Movement")]
     [SerializeField] Movement movement;
     [SerializeField] Animator anim;
     [SerializeField] new SpriteRenderer renderer;
@@ -31,6 +36,21 @@ public class EnemyController : MonoBehaviour
 
         // 키 = headPivot과 Enemy의 발(pivot) 까지의 거리.
         height = Vector2.Distance(headPivot.position, transform.position);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {   
+        if(collision.gameObject.tag == "Player")
+        {
+            Damageable player = collision.gameObject.GetComponent<Damageable>();
+
+            Damageable.DamageMessage message;
+            message.amount = 1;
+            message.attacker = transform;
+            message.attackerName = "몬스터";
+
+            player.OnDamaged(message);
+        }
     }
 
     void Update()

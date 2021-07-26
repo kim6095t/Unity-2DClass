@@ -13,11 +13,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Movement movement;     // 움직임 제어.    
     [SerializeField] AudioSource jumpSFX;   // 점프 효과음.
 
+    [SerializeField] float godModeTime;     // 무적 시간 타임.
+
     const int MAX_JUMP_COUNT = 2;
 
     int jumpCount = 0;
-    bool isAttack = false;
-    bool isRight = true;
+    bool isAttack = false;          // 내가 공격 중일 때.
+    bool isRight = true;            // 나의 방향.
+    bool isDamaged = false;         // 공격 받았을 때.
 
     new SpriteRenderer renderer;    // 스프라이트 렌더러.
     Animator anim;                  // 애니메이터.
@@ -50,9 +53,10 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        if (isAttack || isDamaged)
+            return;
+
         float horizontal = Input.GetAxisRaw("Horizontal"); // 좌:-1f, x:0f, 우:1f.
-        if (isAttack)
-            horizontal = 0f;
 
         // 왼쪽을 눌렀다면.
         if (horizontal <= -1.0f)
@@ -71,7 +75,7 @@ public class PlayerController : MonoBehaviour
     }
     void Jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && !isAttack && jumpCount > 0)
+        if(Input.GetKeyDown(KeyCode.Space) && !isDamaged && !isAttack && jumpCount > 0)
         {
             movement.OnJump();
             jumpCount -= 1;
@@ -83,7 +87,6 @@ public class PlayerController : MonoBehaviour
             jumpCount = MAX_JUMP_COUNT;
         }
     }
-
     void Attack()
     {
         if (Input.GetKeyDown(KeyCode.LeftControl) && !isAttack && movement.isGround)
@@ -92,7 +95,6 @@ public class PlayerController : MonoBehaviour
             isAttack = true;
         }
     }
-
 
     public void OnAttack()
     {
@@ -120,18 +122,65 @@ public class PlayerController : MonoBehaviour
     {
         isAttack = false;
     }
+    public void OnDamaged(Damageable.DamageMessage message)
+    {
+        Transform attaacker = message.attacker;
+
+        // 공격자가 오른쪽에 있다면(포지션 x값이 나보다 크다면) 나는 왼쪽으로 날아간다.
+        Vector2 dir = (attaacker.position.x >= transform.position.x) ? Vector2.left : Vector2.right;
+        dir += Vector2.up;
+
+        isDamaged = true;
+
+        movement.OnStop();               // movement 움직임 제어 중지.
+        movement.OnKnockBack(dir, 4f);   // 실제로 넉백 시켜라.
+
+        StartCoroutine(NoMovement());
+        StartCoroutine(GodMode());
+    }
+    public void OnDead()
+    {
+        // 내 오브젝트를 꺼라.
+        gameObject.SetActive(false);
+    }
 
     bool IsDeadLine()
     {
         return transform.position.y <= -4f;
     }
 
-    // 임시로 죽었을 때.
-    void OnDead()
+
+    IEnumerator GodMode()
     {
-        // 내 오브젝트를 꺼라.
-        gameObject.SetActive(false);
+        gameObject.layer = LayerMask.NameToLayer("GodMode");
+        float time = Time.time + godModeTime;
+        float visibleTime = 0.0f;
+
+        while (Time.time < time)
+        {
+            if(visibleTime <= Time.time)
+            {
+                renderer.enabled = !renderer.enabled;
+                visibleTime = Time.time + 0.1f;
+            }
+                        
+            yield return null;
+        }
+
+        renderer.enabled = true;
+        gameObject.layer = LayerMask.NameToLayer("Player");
     }
+    IEnumerator NoMovement()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        while (!movement.isGround)
+            yield return null;
+
+        isDamaged = false;
+        movement.OnStart();
+    }
+    
 
     private void OnDrawGizmosSelected()
     {
