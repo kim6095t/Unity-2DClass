@@ -6,7 +6,7 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] Transform groundChecker;   // 지면 체크용 위치 변수.
     [SerializeField] LayerMask groundMask;      // 지면 체크 마스크.
-    [SerializeField] float checkerDistance;     // 체크 거리.
+    [SerializeField] float checkRadius;         // 지면 체크 반지름.
 
     [SerializeField] Rigidbody2D rigid;
     
@@ -44,10 +44,7 @@ public class Movement : MonoBehaviour
     void CheckGround()
     {
         // 특정 위치에서 아래 방향으로 레이(광선)를 쏜다.
-        RaycastHit2D hit = Physics2D.Raycast(groundChecker.position, Vector2.down, checkerDistance, groundMask);
-        Debug.DrawRay(groundChecker.position, Vector2.down * checkerDistance, Color.red);
-
-        isGround = hit;
+        isGround = Physics2D.OverlapCircle(groundChecker.position, checkRadius, groundMask);
     }
     void Move()
     {
@@ -99,4 +96,8 @@ public class Movement : MonoBehaviour
         isKnockBack = false;
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(groundChecker.position, checkRadius);
+    }
 }

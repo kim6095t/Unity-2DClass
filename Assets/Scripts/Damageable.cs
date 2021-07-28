@@ -13,17 +13,25 @@ public class Damageable : MonoBehaviour
     }
 
     // 피격 관리 클래스.
+    [SerializeField] Transform infoPivot;                      // HP, 이름, 정보창의 기준점.
     [SerializeField] int maxHp;
 
     [SerializeField] UnityEvent<DamageMessage> OnDamagedEvent; // 매게변수 int형인 함수.
     [SerializeField] UnityEvent OnDeadEvent;                   // 매게변수 없는 함수.
-
+    
 
     int hp;
+
+    public Transform InfoPivot => infoPivot;
+    public int MaxHp => maxHp;
+    public int Hp => hp;
 
     void Start()
     {
         hp = maxHp;
+
+        if(infoPivot != null)
+            HpManager.Instance.Create(this);
     }
 
     public void OnDamaged(DamageMessage message)
