@@ -25,12 +25,17 @@ public class PlayerController : MonoBehaviour
     new SpriteRenderer renderer;    // 스프라이트 렌더러.
     Animator anim;                  // 애니메이터.
 
+    Inventory inventory;            // 인벤토리 클래스.
+
     void Start()
     {
         jumpCount = MAX_JUMP_COUNT;
 
         renderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        anim.SetBool("isAlive", true);
+
+        inventory = new Inventory();
     }
 
     void Update()
@@ -89,7 +94,7 @@ public class PlayerController : MonoBehaviour
     }
     void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && !isAttack && movement.isGround)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && !isAttack && !isDamaged && movement.isGround)
         {
             anim.SetTrigger("onAttack"); // onAttack을 트리거 하겠다.
             isAttack = true;
@@ -131,24 +136,45 @@ public class PlayerController : MonoBehaviour
         dir += Vector2.up;
 
         isDamaged = true;
+        isAttack = false;
 
         movement.OnStop();               // movement 움직임 제어 중지.
         movement.OnKnockBack(dir, 4f);   // 실제로 넉백 시켜라.
 
-        StartCoroutine(NoMovement());
-        StartCoroutine(GodMode());
+        StartCoroutine("NoMovement");
+        StartCoroutine("GodMode");
     }
     public void OnDead()
     {
         // 내 오브젝트를 꺼라.
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
+        gameObject.layer = LayerMask.NameToLayer("Dead");
+
+        anim.SetBool("isAlive", false);
+        anim.SetTrigger("onDead");
+
+        StopAllCoroutines();            // 모든 동작중인 코루틴 비활성화 (단, 이름으로 호출한 것)
+        renderer.enabled = true;        // 랜더러 활성화.
+
+        Time.timeScale = 0.3f;          // 시간의 흐름을 0.5배로 조정하라. (Default : 1)
+        Invoke("OnFinishDead", 1.0f);   // N초 뒤에 해당 함수를 실행하라.
     }
 
+    void OnFinishDead()
+    {
+        Time.timeScale = 1f;
+    }
     bool IsDeadLine()
     {
         return transform.position.y <= -4f;
     }
 
+    
+    public void OnAddItem(ItemObject.ITEM item)
+    {
+        inventory.Add(item);
+        ItemInfoUI.Instance.OnUpdateItem(item, inventory.Count(item));
+    }
 
     IEnumerator GodMode()
     {
