@@ -88,11 +88,10 @@ public class Movement : MonoBehaviour
     IEnumerator KnockBack(Vector2 dir, float power)
     {
         isKnockBack = true;
-        rigid.velocity = new Vector2(0, rigid.velocity.y);  // x축 스피드를 0으로.
+        rigid.velocity = Vector2.zero;                      // x축 스피드를 0으로.
         rigid.AddForce(dir * power, ForceMode2D.Impulse);   // x축 방향으로 힘을 가한다.
 
         yield return new WaitForSeconds(knockBackTime);
-
         isKnockBack = false;
     }
 

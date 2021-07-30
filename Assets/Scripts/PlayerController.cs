@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         anim.SetBool("isAlive", true);
 
-        inventory = new Inventory();
+        inventory = new Inventory();        
     }
 
     void Update()
@@ -54,6 +54,11 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isGround", movement.isGround);
         anim.SetBool("isMove", movement.isMove);
         anim.SetFloat("velocityY", movement.velocityY);
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            DataManager.Instance.SaveAll();
+        }
     }
 
     void Move()
