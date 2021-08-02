@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 0
+  effect: {fileID: 63333073377743039, guid: 5274206b7d387144d89e224e60a7a596, type: 3}
 --- !u!114 &4873077309710139526
 MonoBehaviour:
   m_ObjectHideFlags: 0

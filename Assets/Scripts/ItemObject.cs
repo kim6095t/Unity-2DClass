@@ -20,7 +20,8 @@ public class ItemObject : MonoBehaviour
         {
             PlayerController pc = collision.GetComponent<PlayerController>();
             pc.OnAddItem(itemType);
-            Destroy(gameObject);        // 내 오브젝트를 지우겠다.
+
+            Destroy(gameObject);                                            // 내 오브젝트를 지우겠다.
         }
     }
 }

@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     bool isRight = true;            // 나의 방향.
     bool isDamaged = false;         // 공격 받았을 때.
 
+    bool isOnGoal = false;          // 내가 골에 서 있는가?
+    bool isStopControl = false;     // 조작할 수 없는가?
+
     new SpriteRenderer renderer;    // 스프라이트 렌더러.
     Animator anim;                  // 애니메이터.
 
@@ -40,6 +43,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (isStopControl)
+            return;
+
         // 특정 높이 이하로 내려가면 죽는다.
         if (IsDeadLine())
         {
@@ -50,14 +56,25 @@ public class PlayerController : MonoBehaviour
         Move();
         Jump();
         Attack();
+        Goal();
 
         anim.SetBool("isGround", movement.isGround);
         anim.SetBool("isMove", movement.isMove);
         anim.SetFloat("velocityY", movement.velocityY);
+    }
 
-        if (Input.GetKeyDown(KeyCode.S))
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Goal")
         {
-            DataManager.Instance.SaveAll();
+            isOnGoal = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Goal")
+        {
+            isOnGoal = false;
         }
     }
 
@@ -103,6 +120,15 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetTrigger("onAttack"); // onAttack을 트리거 하겠다.
             isAttack = true;
+        }
+    }
+    void Goal()
+    {
+        if(Input.GetKeyDown(KeyCode.UpArrow) && isOnGoal)
+        {
+            GameManager.Instance.OnStageClear();
+            isStopControl = true;
+            gameObject.SetActive(false);
         }
     }
 

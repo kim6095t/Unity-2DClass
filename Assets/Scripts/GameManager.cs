@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singletone<GameManager>
 {
     [SerializeField] Animation clearDoor;
+
+    [SerializeField] UnityEvent StageClear;
+    [SerializeField] UnityEvent StageFail;
 
     int keyCount = 0;
     void Start()
@@ -24,5 +29,23 @@ public class GameManager : Singletone<GameManager>
             Debug.Log("Clear Stage");
             clearDoor.Play();
         }
+    }
+
+    public void OnStageClear()
+    {
+        StageClear?.Invoke();
+    }
+    public void OnStageFail()
+    {
+        StageFail?.Invoke();
+    }
+
+    public void OnRetry()
+    {
+        SceneManager.LoadScene("Game");
+    }
+    public void OnWorldMap()
+    {
+        SceneManager.LoadScene("WorldMap");
     }
 }
