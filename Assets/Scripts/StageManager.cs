@@ -42,7 +42,7 @@ public class StageManager : Singletone<StageManager>
             // 스테이지로 이동.
             isMoving = true;
             PlayerData.Instance.lastStage = playerIndex;
-            DataManager.SaveAll();
+            //DataManager.SaveAll();
             SceneManager.LoadScene("Game");
         }
         else

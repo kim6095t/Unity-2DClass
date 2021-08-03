@@ -38,7 +38,12 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         anim.SetBool("isAlive", true);
 
-        inventory = new Inventory();        
+        inventory = new Inventory();
+
+        for(ItemObject.ITEM type = 0; type < ItemObject.ITEM.Count; type++)
+        {
+            ItemInfoUI.Instance.OnUpdateItem(type, inventory.Count(type));
+        }
     }
 
     void Update()

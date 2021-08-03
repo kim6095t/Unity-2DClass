@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singletone<GameManager>
 {
     [SerializeField] Animation clearDoor;
+    [SerializeField] ItemObject.ITEM whatIsKey;
 
     [SerializeField] UnityEvent StageClear;
     [SerializeField] UnityEvent StageFail;
@@ -14,26 +15,33 @@ public class GameManager : Singletone<GameManager>
     int keyCount = 0;
     void Start()
     {
-        GameKey[] allKey = GameObject.FindObjectsOfType<GameKey>();
-        keyCount = allKey.Length;
-
-        foreach(GameKey key in allKey)
-            key.OnGet += OnGetKey;
+        ItemObject[] allItems = FindObjectsOfType<ItemObject>();
+        foreach(ItemObject item in allItems)
+        {
+            if (item.ItemType == whatIsKey)
+                keyCount++;
+        }
     }
 
-    void OnGetKey()
+    public void OnGetKey(ItemObject.ITEM item)
     {
-        keyCount -= 1;
-        if(keyCount <= 0)
+        if(item == whatIsKey)
         {
-            Debug.Log("Clear Stage");
-            clearDoor.Play();
+            keyCount -= 1;
+            if (keyCount <= 0)
+            {
+                Debug.Log("open door!");
+                if (clearDoor != null)
+                    clearDoor.Play();
+            }
         }
     }
 
     public void OnStageClear()
     {
         StageClear?.Invoke();
+
+        DataManager.SaveAll();
     }
     public void OnStageFail()
     {

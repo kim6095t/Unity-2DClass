@@ -8,16 +8,19 @@ public class ItemObject : MonoBehaviour
     {
         Gem,
         Cherry,
+
+        Count,
     }
 
     [SerializeField] ITEM itemType;
 
+    public ITEM ItemType => itemType;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Enter");
-
         if(collision.tag == "Player")
         {
+            GameManager.Instance.OnGetKey(ItemType);
             PlayerController pc = collision.GetComponent<PlayerController>();
             pc.OnAddItem(itemType);
 

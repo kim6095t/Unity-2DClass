@@ -18,12 +18,6 @@ public class ItemInfoUI : MonoBehaviour
         instance = this;
     }
 
-    void Start()
-    {
-        gemText.text = "0";
-        cherryText.text = "0";
-    }
-
     public void OnUpdateItem(ItemObject.ITEM type, int amount)
     {
         switch(type)

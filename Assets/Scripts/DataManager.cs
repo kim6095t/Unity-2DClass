@@ -15,6 +15,10 @@ public static class DataManager
     {
         return PlayerPrefs.GetFloat(key);
     }
+    public static bool GetBool(string key)
+    {
+        return PlayerPrefs.GetInt(key) == 1;
+    }
 
     public static void SetInt(string key, int value)
     {
@@ -23,6 +27,10 @@ public static class DataManager
     public static void SetFloat(string key, float value)
     {
         PlayerPrefs.SetFloat(key, value);
+    }
+    public static void SetBool(string key, bool isBool)
+    {
+        PlayerPrefs.SetInt(key, isBool ? 1 : 0);
     }
 
     public static void SaveAll()
