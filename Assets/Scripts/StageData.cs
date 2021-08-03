@@ -8,8 +8,8 @@ public class StageData : MonoBehaviour
 
     void Start()
     {
-        DataManager.Instance.OnLoad += Load;
-        DataManager.Instance.OnSave += Save;
+        DataManager.OnLoad += Load;
+        DataManager.OnSave += Save;
 
         isClearStage = new bool[10];
         Load();
@@ -17,11 +17,10 @@ public class StageData : MonoBehaviour
 
     void Load()
     {
-        DataManager dm = DataManager.Instance;
         for(int i = 0; i<10; i++)
         {
             string key = string.Concat("ClearStage", i);
-            isClearStage[i] = dm.GetInt(key) == 1;
+            isClearStage[i] = DataManager.GetInt(key) == 1;
         }
 
         Debug.Log("StageData Load");
@@ -29,11 +28,10 @@ public class StageData : MonoBehaviour
     }
     void Save()
     {
-        DataManager dm = DataManager.Instance;
         for (int i = 0; i < 10; i++)
         {
             string key = string.Concat("ClearStage", i);
-            dm.SetInt(key, isClearStage[i] ? 1 : 0);
+            DataManager.SetInt(key, isClearStage[i] ? 1 : 0);
         }
 
         Debug.Log("StageData Save");

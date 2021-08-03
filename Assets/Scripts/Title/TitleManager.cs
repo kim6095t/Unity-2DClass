@@ -8,7 +8,7 @@ public class TitleManager : MonoBehaviour
     public void NewGame()
     {
         Debug.Log("NewGame");
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("WorldMap");
     }
     public void OpenOption()
     {

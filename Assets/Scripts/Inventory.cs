@@ -10,8 +10,8 @@ public class Inventory
     {
         storage = new Dictionary<ITEM, int>();
 
-        DataManager.Instance.OnSave += Save;
-        DataManager.Instance.OnLoad += Load;
+        DataManager.OnSave += Save;
+        DataManager.OnLoad += Load;
 
         Load();
     }
@@ -46,15 +46,13 @@ public class Inventory
 
     public void Load()
     {
-        DataManager dm = DataManager.Instance;
-        Init(ITEM.Gem, dm.GetInt("Gem"));
-        Init(ITEM.Cherry, dm.GetInt("Cherry"));
+        Init(ITEM.Gem, DataManager.GetInt("Gem"));
+        Init(ITEM.Cherry, DataManager.GetInt("Cherry"));
     }
     public void Save()
     {
-        DataManager dm = DataManager.Instance;
-        dm.SetInt("Gem", Count(ITEM.Gem));
-        dm.SetInt("Cherry", Count(ITEM.Cherry));
+        DataManager.SetInt("Gem", Count(ITEM.Gem));
+        DataManager.SetInt("Cherry", Count(ITEM.Cherry));
     }
 
     public int Count(ITEM type)
