@@ -21,7 +21,7 @@ public class GameOver : MonoBehaviour
 
     public void OnRetry()
     {
-        // ¹Ù²ï ÁöÁ¡
-        SceneManager.LoadScene("Game");
+        // ¹Ù²ï ÁöÁ¡        
+        SceneMover.Instance.MoveScene("Game");
     }
 }

@@ -12,8 +12,6 @@ public class SceneMover : Singletone<SceneMover>
     {
         blindImage.enabled = false;
         DontDestroyOnLoad(gameObject);
-
-        MoveScene("Title");
     }
 
     bool isMoving;      // 씬 로딩 여부.
@@ -47,7 +45,6 @@ public class SceneMover : Singletone<SceneMover>
 
         // 씬 로딩이 끝남.
         yield return StartCoroutine(FadeIn());  // FadeIn 코루틴이 끝날때까지 기다린다.
-
         isMoving = false;
     }
 

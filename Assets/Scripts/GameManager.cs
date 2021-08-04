@@ -49,11 +49,11 @@ public class GameManager : Singletone<GameManager>
     }
 
     public void OnRetry()
-    {
-        SceneManager.LoadScene("Game");
+    {   
+        SceneMover.Instance.MoveScene("Game");
     }
     public void OnWorldMap()
-    {
-        SceneManager.LoadScene("WorldMap");
+    {   
+        SceneMover.Instance.MoveScene("WorldMap");
     }
 }

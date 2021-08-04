@@ -43,7 +43,7 @@ public class StageManager : Singletone<StageManager>
             isMoving = true;
             PlayerData.Instance.lastStage = playerIndex;
             //DataManager.SaveAll();
-            SceneManager.LoadScene("Game");
+            SceneMover.Instance.MoveScene("Game");
         }
         else
             StartCoroutine(Move(index));
