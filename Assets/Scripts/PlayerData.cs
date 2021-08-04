@@ -19,9 +19,15 @@ public class PlayerData : Singletone<PlayerData>
         DataManager.OnLoad += OnLoad;
 
         OnLoad();
+        OnInit();
+
         DontDestroyOnLoad(gameObject);
     }
 
+    void OnInit()
+    {
+        isUnlockStages[0] = true;
+    }
     void OnSave()
     {
         DataManager.SetInt("lastStage", lastStage);
