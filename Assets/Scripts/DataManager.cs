@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface ISave
+{
+    void OnSave();
+    void OnLoad();
+}
+
 public static class DataManager
 {
     public static event System.Action OnSave;

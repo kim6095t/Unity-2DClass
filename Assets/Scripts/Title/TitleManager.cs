@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class TitleManager : MonoBehaviour
 {
+    private void Start()
+    {
+        SoundManager.Instance.PlayBGM("Forest1");
+    }
+
     public void NewGame()
     {
         SceneMover.Instance.MoveScene("WorldMap");

@@ -15,6 +15,17 @@ public class SceneMover : Singletone<SceneMover>
     }
 
     bool isMoving;      // 씬 로딩 여부.
+    bool isOpenOption;  // 옵션 창 켜짐 여부.
+
+    private void Update()
+    {
+        if(!isOpenOption && Input.GetKeyDown(KeyCode.Escape))
+        {
+            isOpenOption = true;
+            OptionManager.OnExit += () => { isOpenOption = false; };
+            SceneManager.LoadScene("Option", LoadSceneMode.Additive);
+        }
+    }
 
     public void MoveScene(string sceneName)
     {
