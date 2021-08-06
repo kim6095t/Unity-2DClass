@@ -476,6 +476,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7969564471957486561, guid: 2251fda9c4c022c429ff3eeba4137a3e, type: 3}
+      propertyPath: initCount
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7969564471957486561, guid: 2251fda9c4c022c429ff3eeba4137a3e, type: 3}
+      propertyPath: poolPrefab
+      value: 
+      objectReference: {fileID: 3689266781022188110, guid: f33804b3455bca047ac5694b5d59b090, type: 3}
     - target: {fileID: 7969564471957486572, guid: 2251fda9c4c022c429ff3eeba4137a3e, type: 3}
       propertyPath: m_Name
       value: SoundManager

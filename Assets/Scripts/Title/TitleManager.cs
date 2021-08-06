@@ -6,7 +6,7 @@ public class TitleManager : MonoBehaviour
 {
     private void Start()
     {
-        SoundManager.Instance.PlayBGM("Forest1");
+        SoundManager.Instance.PlayBGM(SoundManager.BGM.Forest1);
     }
 
     public void NewGame()
@@ -15,7 +15,7 @@ public class TitleManager : MonoBehaviour
     }
     public void OpenOption()
     {
-        Debug.Log("OpenOption");
+        SceneMover.Instance.OpenOption();
     }
     public void ExitGame()
     {

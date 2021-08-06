@@ -19,11 +19,9 @@ public class SceneMover : Singletone<SceneMover>
 
     private void Update()
     {
-        if(!isOpenOption && Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isOpenOption = true;
-            OptionManager.OnExit += () => { isOpenOption = false; };
-            SceneManager.LoadScene("Option", LoadSceneMode.Additive);
+            OpenOption();
         }
     }
 
@@ -35,6 +33,15 @@ public class SceneMover : Singletone<SceneMover>
 
         isMoving = true;
         StartCoroutine(MoveTo(sceneName));      // 씬 이동 코루틴 호출.
+    }
+    public void OpenOption()
+    {
+        if (!isOpenOption)
+        {
+            isOpenOption = true;
+            OptionManager.OnExit += () => { isOpenOption = false; };
+            SceneManager.LoadScene("Option", LoadSceneMode.Additive);
+        }
     }
 
     IEnumerator MoveTo(string sceneName)

@@ -38,6 +38,8 @@ public class OptionManager : MonoBehaviour
         OnExit?.Invoke();           // 창이 꺼질때 등록된 이벤트 호출.
         OnExit = null;              // 등록된 이벤트 모두 삭제.
 
+        soundManager.OnSave();      // 옵션 저장.
+
         // 현재 씬을 지운다.
         SceneManager.UnloadSceneAsync("Option");
     }
