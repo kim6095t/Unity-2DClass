@@ -68,7 +68,7 @@ public class EnemyController : MonoBehaviour
         Vector2 direction = isRight ? Vector2.right : Vector2.left;
         if(Physics2D.Raycast(headPivot.position, direction, wallDistance, groundMask))
         {
-            Debug.Log("앞에 벽이 있다!!");
+            //Debug.Log("앞에 벽이 있다!!");
             horizontal *= -1f;
         }
     }
@@ -82,7 +82,7 @@ public class EnemyController : MonoBehaviour
         Debug.DrawRay(pivot, Vector2.down * (height + .5f), Color.red);
         if(!Physics2D.Raycast(pivot, Vector2.down, height + .5f, groundMask))
         {
-            Debug.Log("앗! 절벽이다.");
+            //Debug.Log("앗! 절벽이다.");
             horizontal *= -1f;
         }
     }

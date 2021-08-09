@@ -6,13 +6,28 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singletone<GameManager>
 {
-    [SerializeField] Animation clearDoor;
+    [SerializeField] Transform stageParent;
     [SerializeField] ItemObject.ITEM whatIsKey;
 
     [SerializeField] UnityEvent StageClear;
     [SerializeField] UnityEvent StageFail;
 
+    public event System.Action OnOpenDoor;              // 문이 열리는 이벤트.
+
     int keyCount = 0;
+
+    protected new void Awake()      // 부모 클래스의 Awake를 가린다.
+    {
+        base.Awake();               // 부모 클래스 Singletone의 Awake 호출.
+
+        int stageNumber = PlayerData.Instance.lastStage;
+        for(int i = 0; i<stageParent.childCount; i++)
+        {
+            Transform stage = stageParent.GetChild(i);    // i번째 자식 오브젝트 대입.
+            stage.gameObject.SetActive(i == stageNumber); // stageNumber 번째 오브젝트만 켠다.
+        }
+    }
+
     void Start()
     {
         ItemObject[] allItems = FindObjectsOfType<ItemObject>();
@@ -30,9 +45,7 @@ public class GameManager : Singletone<GameManager>
             keyCount -= 1;
             if (keyCount <= 0)
             {
-                Debug.Log("open door!");
-                if (clearDoor != null)
-                    clearDoor.Play();
+                OnOpenDoor?.Invoke();           // 문 열림 이벤트 호출.
             }
         }
     }
