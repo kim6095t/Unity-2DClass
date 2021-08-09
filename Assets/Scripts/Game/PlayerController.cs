@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singletone<PlayerController>
 {
     [SerializeField] Transform attackPivot;     // 공격 점 기준.
     [SerializeField] float attackDistance;      // 공격 점 위치.
@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
 
     bool isOnGoal = false;          // 내가 골에 서 있는가?
     bool isStopControl = false;     // 조작할 수 없는가?
+
+    bool isDeadzone = false;        // 내가 데드존에 있는가?
 
     new SpriteRenderer renderer;    // 스프라이트 렌더러.
     Animator anim;                  // 애니메이터.
@@ -48,15 +50,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (isStopControl)
+        if (isStopControl || isDeadzone)
             return;
-
-        // 특정 높이 이하로 내려가면 죽는다.
-        if (IsDeadLine())
-        {
-            OnDead();
-            return;
-        }
 
         Move();
         Jump();
@@ -70,9 +65,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Goal")
+        string tag = collision.gameObject.tag;
+        if(tag == GameData.TAG_GOAL)
         {
             isOnGoal = true;
+        }
+        else if(tag == GameData.TAG_DEADZONE)
+        {
+            isDeadzone = true;
+            // GetComponent<Rigidbody2D>().simulated = false;     // 중력 물리 연산 안하겠다.
+            OnDead();
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

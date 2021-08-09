@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1986354714213580732}
   - component: {fileID: 1986354714213580610}
   - component: {fileID: 1986354714213580733}
-  - component: {fileID: 1986354714213580611}
   m_Layer: 0
   m_Name: GameDoor
   m_TagString: Goal
@@ -77,18 +76,6 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &1986354714213580611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1986354714213580735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 621a3cb65810691449401278a556a646, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1986354715754601460
 GameObject:
   m_ObjectHideFlags: 0
