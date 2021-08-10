@@ -29,15 +29,14 @@ public class SoundManager : PoolManager<SoundManager, SFXObject>
     {
         DataManager.OnSave += OnSave;
         DataManager.OnLoad += OnLoad;
+        DataManager.OnInit += OnInit;
 
         OnLoad();
 
         // 최초에 실행이 되었을 때.
         if (isSaved == false)
         {
-            // 초기 값.
-            bgmVolume = GameData.MAX_BGM_VOLUMN;
-            sfxVolume = GameData.MAX_SFX_VOLUMN;
+            OnInit();
         }
 
         audioSource.volume = bgmVolume;             // 스피커 사운드 조절.
@@ -61,7 +60,6 @@ public class SoundManager : PoolManager<SoundManager, SFXObject>
             }
         }
     }
-
     public void PlaySFX(string sfxName)
     {
         for (int i = 0; i < sfxs.Length; i++)
@@ -86,6 +84,12 @@ public class SoundManager : PoolManager<SoundManager, SFXObject>
         sfxVolume = volume;
     }
 
+    void OnInit()
+    {
+        // 초기 값.
+        bgmVolume = GameData.MAX_BGM_VOLUMN;
+        sfxVolume = GameData.MAX_SFX_VOLUMN;
+    }
     public void OnSave()
     {
         Debug.Log("Sound Manager Saved!!");

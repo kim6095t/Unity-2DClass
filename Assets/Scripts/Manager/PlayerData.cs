@@ -17,6 +17,7 @@ public class PlayerData : Singletone<PlayerData>
 
         DataManager.OnSave += OnSave;
         DataManager.OnLoad += OnLoad;
+        DataManager.OnInit += OnInit;
 
         OnLoad();
         OnInit();
